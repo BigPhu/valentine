@@ -169,7 +169,7 @@ int main() {
     clearScreen();
     setColor(12, 0);
     
-    Renderer test(80, 29, 50, 20, ' ', ".,-~:;=!*#$@", 0, 0.04);
+    Renderer test(80, 29, 50, 20, ' ', ".,-~:;=!*#$@", 20, 0.04);
     test.vertex(50, heartVertices);
     test.triangle(285, heartTriangles);
     test.light(5.0f, Vec3<float>(0.0f, 0.0f, -1.0f), 10);
