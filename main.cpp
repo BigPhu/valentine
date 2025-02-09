@@ -159,15 +159,15 @@ int heartTriangles[285] = {
 };
 
 int main() {
-    setColor(5, 0);
+    setColor(35, 40);
     printLirik();
 
     hideCursor();
-    std::cout << "\033[1;33m           --- Sending my love to you ---\n";
+    std::cout << "\033[93m           --- Sending my love to you ---\n";
     loadingBar(53, 1600);
     
     clearScreen();
-    setColor(12, 0);
+    setColor(91, 40);
     
     Renderer test(80, 29, 50, 20, ' ', ".,-~:;=!*#$@", 20, 0.04);
     test.vertex(50, heartVertices);
@@ -176,19 +176,17 @@ int main() {
     test.rotation(0.0f, 0.03f, 0.0f);
 
     float i = 0;
-    int frame = 0;
     while (true) {
         if (GetAsyncKeyState(VK_ESCAPE)) {
             std::cout << "Escape key pressed. Exitting...\n";
             break;
         } 
         
-        test.translation(Vec3<float>(0.0f, sin(i)/2, 0.0f));
+        test.translation(Vec3<float>(0.0f, sin(i) / 2, 0.0f));
         test.resetBuffers();
         test.render();
         
         i += 0.04;
-        ++frame;
     }
 
     return 0;

@@ -1,54 +1,36 @@
 #pragma once
 
-#include <windows.h>
+#include <iostream>
+#include <thread>
+#include <chrono>
 
 void loadingBar(int length, int duration) {
     for (int i = 0; i <= length; i++) {
         int percentage = (i * 100) / length;
-        
-        std::cout << "\033[1;33m\r{";
-        for (int j = 0; j < i; j++) std::cout << "\033[1;31m=";
+
+        std::cout << "\033[93m\r{";  // Yellow curly brace
+        for (int j = 0; j < i; j++) std::cout << "\033[91m="; // Red progress
         for (int j = i; j < length; j++) std::cout << " ";
-        std::cout << "\033[1;33m} \033[1;31m" << percentage << "% " << std::flush;
-        
+        std::cout << "\033[93m} \033[91m" << percentage << "% " << std::flush; // Yellow brace, red percentage
+
         std::this_thread::sleep_for(std::chrono::milliseconds(duration / length));
     }
-    std::cout << "\033[1;32m Done!" << std::endl;
+    std::cout << "\033[92m Done!\033[0m" << std::endl; // Green "Done!" with reset
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
 }
 
 void clearScreen() {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD coordScreen = {0, 0};
-    DWORD cCharsWritten;
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    DWORD dwConSize;
-
-    if (!GetConsoleScreenBufferInfo(hConsole, &csbi))
-        return;
-
-    dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
-
-    FillConsoleOutputCharacter(hConsole, TEXT(' '), dwConSize, coordScreen, &cCharsWritten);
-    GetConsoleScreenBufferInfo(hConsole, &csbi);
-    FillConsoleOutputAttribute(hConsole, csbi.wAttributes, dwConSize, coordScreen, &cCharsWritten);
-    SetConsoleCursorPosition(hConsole, coordScreen);
+    std::cout << "\033[2J\033[H" << std::flush;
 }
 
 void hideCursor() {
-    HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO cursorInfo;
-    
-    // Get current cursor information
-    GetConsoleCursorInfo(consoleHandle, &cursorInfo);
-    
-    // Set the cursor visibility to false
-    cursorInfo.bVisible = false;
-    SetConsoleCursorInfo(consoleHandle, &cursorInfo);
+    std::cout << "\033[?25l" << std::flush;
+}
+
+void showCursor() {
+    std::cout << "\033[?25h" << std::flush;
 }
 
 void setColor(int textColor, int backgroundColor) {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    int colorAttribute = (backgroundColor << 4) | textColor;
-    SetConsoleTextAttribute(hConsole, colorAttribute);
+    std::cout << "\033[" << textColor << ";" << backgroundColor << "m";
 }
