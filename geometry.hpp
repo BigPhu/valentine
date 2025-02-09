@@ -24,7 +24,7 @@ public:
     }
 
     T length() const {
-        return std::sqrt(x * x + y * y + z * z);
+        return std::sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
     }
 
     T angleWith(const Vec3<T>& other) const {
@@ -54,79 +54,79 @@ public:
     }
 
     Vec3<T> operator+(const Vec3<T>& other) const {
-        return Vec3(x + other.x, y + other.y, z + other.z);
+        return Vec3(this->x + other.x, this->y + other.y, this->z + other.z);
     }
 
     Vec3<T>& operator+=(const Vec3<T>& other) {
-        x += other.x;
-        y += other.y;
-        z += other.z;
+        this->x += other.x;
+        this->y += other.y;
+        this->z += other.z;
         return *this;
     }
 
     Vec3<T> operator-(const Vec3<T>& other) const {
-        return Vec3(x - other.x, y - other.y, z - other.z);
+        return Vec3(this->x - other.x, this->y - other.y, this->z - other.z);
     }
 
     Vec3<T>& operator-=(const Vec3<T>& other) {
-        x -= other.x;
-        y -= other.y;
-        z -= other.z;
+        this->x -= other.x;
+        this->y -= other.y;
+        this->z -= other.z;
         return *this;
     }
 
     Vec3<T> operator*(const T& scalar) const {
-        return Vec3(x * scalar, y * scalar, z * scalar);
+        return Vec3(this->x * scalar, this->y * scalar, this->z * scalar);
     }
 
     Vec3<T>& operator*=(const T& scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
+        this->x *= scalar;
+        this->y *= scalar;
+        this->z *= scalar;
         return *this;
     }
 
     Vec3<T> operator/(const T& scalar) const {
         if (scalar == 0) {
             std::stringstream os;
-            os << "Vector division by zero error at: (" << x << ", " << y << ", " << z << ")";
+            os << "Vector division by zero error at: (" << this->x << ", " << this->y << ", " << this->z << ")";
             throw std::runtime_error(os.str());
         }
-        return Vec3(x / scalar, y / scalar, z / scalar);
+        return Vec3(this->x / scalar, this->y / scalar, this->z / scalar);
     }
 
     Vec3<T>& operator/=(const T& scalar) {
         if (scalar == 0) {
             std::stringstream os;
-            os << "Vector division by zero error at: (" << x << ", " << y << ", " << z << ")";
+            os << "Vector division by zero error at: (" << this->x << ", " << this->y << ", " << this->z << ")";
             throw std::runtime_error(os.str());
         }
-        x /= scalar;
-        y /= scalar;
-        z /= scalar;
+        this->x /= scalar;
+        this->y /= scalar;
+        this->z /= scalar;
         return *this;
     }
 
     // Dot product 
     T operator*(const Vec3<T>& other) const {
-        return x * other.x + y * other.y + z * other.z;
+        return this->x * other.x + this->y * other.y + this->z * other.z;
     }
 
     // Cross product 
     Vec3<T> operator^(const Vec3<T>& other) const {
         return Vec3(
-            y * other.z - z * other.y,
-            z * other.x - x * other.z,
-            x * other.y - y * other.x);
+            this->y * other.z - this->z * other.y,
+            this->z * other.x - this->x * other.z,
+            this->x * other.y - this->y * other.x);
     }
 
     Vec3<T>& operator^=(const Vec3<T>& other) {
-        T newX = y * other.z - z * other.y;
-        T newY = z * other.x - x * other.z;
-        T newZ = x * other.y - y * other.x;
-        x = newX;
-        y = newY;
-        z = newZ;
+        T newX = this->y * other.z - this->z * other.y;
+        T newY = this->z * other.x - this->x * other.z;
+        T newZ = this->x * other.y - this->y * other.x;
+        this->x = newX;
+        this->y = newY;
+        this->z = newZ;
         return *this;
     }
 
@@ -136,13 +136,13 @@ public:
         float sinZ = sin(thetaZ), cosZ = cos(thetaZ);
 
         
-        float newX = (cosY*cosZ)*x + (cosZ*sinY*sinX - sinZ*cosX)*y + (cosZ*sinY*cosX + sinZ*sinX)*z;
-        float newY = (cosY*sinZ)*x + (sinZ*sinY*sinX + cosZ*cosX)*y + (sinZ*sinY*cosX - cosZ*sinX)*z;
-        float newZ = (-sinY)*x + (cosY*sinX)*y + (cosY*cosX)*z;
+        float newX = (cosY * cosZ) * this->x + (cosZ * sinY * sinX - sinZ * cosX) * this->y + (cosZ * sinY * cosX + sinZ * sinX) * this->z;
+        float newY = (cosY * sinZ) * this->x + (sinZ * sinY * sinX + cosZ * cosX) * this->y + (sinZ * sinY * cosX - cosZ * sinX) * this->z;
+        float newZ = (-sinY) * this->x + (cosY * sinX) * this->y + (cosY * cosX) * this->z;
 
-        x = newX;
-        y = newY;
-        z = newZ;
+        this->x = newX;
+        this->y = newY;
+        this->z = newZ;
     }
 
     template <typename U>
@@ -197,56 +197,43 @@ public:
     Vec3<T> A, B, C;
     Vec3<T> AB, AC, BC;
     Vec3<T> normal;
-    float s;
     T D;
 
-    Triangle(const Vec3<T>& A, const Vec3<T>& B, const Vec3<T>& C) {
-        this->A = A;
-        this->B = B;
-        this->C = C;
-        AB = Vec3<T>(A, B); 
-        AC = Vec3<T>(A, C);
-        BC = Vec3<T>(B, C);
-        normal = (AB ^ BC);
-        s = 0.5 * normal.length();
-        D = -normal.x * A.x - normal.y * A.y - normal.z * A.z;
+    Triangle(const Vec3<T>& A, const Vec3<T>& B, const Vec3<T>& C) 
+        : A(A), B(B), C(C), AB(Vec3<T>(A, B)), AC(Vec3<T>(A, C)), BC(Vec3<T>(B, C)) {
+
+        this->normal = (this->AB ^ this->BC);
+
+        this->D = -this->normal.x * A.x - this->normal.y * A.y - this->normal.z * A.z;
     }
 
-    Triangle(const Triangle<T>& other) {
-        A = other.A;
-        B = other.B;
-        C = other.C;
-        AB = Vec3<T>(other.A, other.B); 
-        AC = Vec3<T>(other.A, other.C);
-        BC = Vec3<T>(other.B, other.C);
-        normal = (other.AB ^ other.AC);
-        s = 0.5f * normal.length();
-        D = -normal.x * A.x - normal.y * A.y - normal.z * A.z;
-    }
+    Triangle(const Triangle<T>& other) 
+        : A(other.A), B(other.B), C(other.C), AB(other.AB), AC(other.AC), BC(other.BC), 
+          normal(other.normal), D(other.D) { }
 
     ~Triangle() {}
 
     float getXFrom(float y, float z) {
-        if (normal.x == 0) {
-            return std::max(A.x, std::max(B.x, C.x));
+        if (this->normal.x == 0) {
+            return std::max(this->A.x, std::max(this->B.x, this->C.x));
         } else {
-            return (-D - normal.y * y - normal.z * z) / normal.x;
+            return (-this->D - this->normal.y * y - this->normal.z * z) / this->normal.x;
         }
     }
 
     float getYFrom(float x, float z) {
-        if (normal.y == 0) {
-            return std::max(A.y, std::max(B.y, C.y));
+        if (this->normal.y == 0) {
+            return std::max(this->A.y, std::max(this->B.y, this->C.y));
         } else {
-            return (-D - normal.x * x - normal.z * z) / normal.y;
+            return (-this->D - this->normal.x * x - this->normal.z * z) / this->normal.y;
         }
     }
 
     float getZFrom(float x, float y) {
-        if (normal.z == 0) {
-            return std::max(A.z, std::max(B.z, C.z));
+        if (this->normal.z == 0) {
+            return std::max(this->A.z, std::max(this->B.z, this->C.z));
         } else {
-            return (-D - normal.x * x - normal.y * y) / normal.z;
+            return (-this->D - this->normal.x * x - this->normal.y * y) / this->normal.z;
         }
     }
 
@@ -259,9 +246,9 @@ public:
         float d0, d1, d2;
         bool hasNeg, hadPos;
 
-        d0 = sign(vertex, A, B);
-        d1 = sign(vertex, B, C);
-        d2 = sign(vertex, C, A);
+        d0 = sign(vertex, this->A, this->B);
+        d1 = sign(vertex, this->B, this->C);
+        d2 = sign(vertex, this->C, this->A);
 
         hasNeg = (d0 < 0) || (d1 < 0) || (d2 < 0);
         hadPos = (d0 > 0) || (d1 > 0) || (d2 > 0);
